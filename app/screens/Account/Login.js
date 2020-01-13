@@ -2,12 +2,14 @@
 *  Page Login
 */
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Image, View, Text, ScrollView, StyleSheet } from 'react-native';
-import { Divider, Button } from 'react-native-elements';
-import { LoginForm } from './../../components/LoginForm';
+import { Divider, SocialIcon } from 'react-native-elements';
+import  LoginForm  from './../../components/LoginForm';
+import Toast from 'react-native-easy-toast';
 
 export const Login = (props) => {
+    const toastRef = useRef();
     const { navigation } = props;
     return(
         <ScrollView>
@@ -17,15 +19,25 @@ export const Login = (props) => {
                 resizeMode="contain"
             />
             <View style={styles.viewContainer}>
-                <LoginForm/>
+                <LoginForm toastRef={toastRef}/>
                 <CreateAccount 
                     navigation={navigation}
                 />
             </View>
             <Divider style={styles.divider} />
             <View style={styles.viewContainer}>
-                <Text>Login con Facebook</Text>
+                <SocialIcon 
+                    title='Sign In With Facebook'
+                    button
+                    onPress={() => { console.log('login facebook') }}
+                    type='facebook'
+                />
             </View>
+            <Toast 
+                position="center"
+                opacity={0.5}
+                ref={toastRef}
+           />
         </ScrollView>
     );
 }

@@ -5,16 +5,41 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
+import { withNavigation } from 'react-navigation';
+import { validateEmail } from './../../utils/ValidationsForm';
+import { Loading } from './../Loading'
+import * as Firebase from 'firebase';
 
-export const LoginForm = () => {
-
+const LoginForm = (props) => {
+    
+    const { toastRef, navigation } = props;
     const [ hidePassword, setHidePassword ] = useState(false);
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ isVisibleLoading, setIsVisibleLoading ] = useState(false);
 
-    const login = () => {
-        console.log('Usuario logeado');
-        console.log(`Email: ${email} y password: ${password}`);
+    const login = async() => {
+        setIsVisibleLoading(true);
+        if(!email || !password){
+            toastRef.current.show('Todos los campos son obligatorios');
+        }else{
+            if(!validateEmail(email)){
+                toastRef.current.show('El email no es valido');
+            }else{
+                await Firebase
+                    .auth()
+                    .signInWithEmailAndPassword(email, password)
+                    .then(() => {
+                        console.log('Login...')
+                        navigation.navigate('Account');
+                    })
+                    .catch((e)=>{
+                        console.log(e);
+                        toastRef.current.show('Email o Passoword Incorrecto');
+                    });
+            }
+        }
+        setIsVisibleLoading(false);
     }
 
     return (
@@ -52,9 +77,12 @@ export const LoginForm = () => {
                 onPress={ login }
                 title="Inciar Session"
             />
+            <Loading text="Creando cuenta..." isVisible={isVisibleLoading} />
         </View>
     );
 }
+
+export default withNavigation(LoginForm);
 
 const styles = StyleSheet.create({
     formContainer:{
