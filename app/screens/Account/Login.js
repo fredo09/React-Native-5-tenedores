@@ -4,8 +4,9 @@
 
 import React, { useRef } from 'react';
 import { Image, View, Text, ScrollView, StyleSheet } from 'react-native';
-import { Divider, SocialIcon } from 'react-native-elements';
+import { Divider } from 'react-native-elements';
 import  LoginForm  from './../../components/LoginForm';
+import SocialButtonFacebook from './../../components/LoginFacebook';
 import Toast from 'react-native-easy-toast';
 
 export const Login = (props) => {
@@ -26,12 +27,7 @@ export const Login = (props) => {
             </View>
             <Divider style={styles.divider} />
             <View style={styles.viewContainer}>
-                <SocialIcon 
-                    title='Sign In With Facebook'
-                    button
-                    onPress={() => { console.log('login facebook') }}
-                    type='facebook'
-                />
+               <SocialButtonFacebook toastRef={toastRef} navigation={navigation}/>
             </View>
             <Toast 
                 position="center"
@@ -80,6 +76,6 @@ const styles = StyleSheet.create({
     },
     divider: {
         backgroundColor: "#00a680",
-        margin: 40
+        margin: 20
     }
 });
