@@ -37,7 +37,11 @@ export const UserLogged = () => {
                 setIsVisibleLoading={setIsVisibleLoading}
                 setTextInfo={setTextInfo}
             />
-            <AccountOptions />
+            <AccountOptions 
+                userInfo={userInfo} 
+                setReloadData={setReloadData}
+                toastRef={toastRef}
+            />
             <Button 
                 title="Logout"
                 containerStyle={styles.btnContainer}

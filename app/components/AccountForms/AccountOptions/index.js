@@ -2,11 +2,22 @@
 *   Compoenents Opcion Account 
 */
 
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import { ModalOptions } from './../../Modal'
 
-export const AccountOptions = () => {
+// Components
+import { FormDisplayName } from './../ChangeDisplayName'
+import { FormEmail } from './../ChangeEmail';
+import { FormPassword } from './../ChangePassword';
+
+export const AccountOptions = (props) => {
+
+    const { userInfo, setReloadData, toastRef } = props;
+ 
+    const [ isVisibleModal, setIsVisibleModal] = useState(false);
+    const [ isRenderComponent, setIsRenderComponent ] = useState(null);
 
     //Lista de opciones
     const ListOptions = [
@@ -17,7 +28,9 @@ export const AccountOptions = () => {
             iconColorLeft:'#ccc',
             iconNameRight:'chevron-right' ,
             iconColorRight:'#ccc',
-            onPress : () => { console.log('Nombre') }
+            onPress : () => { 
+                showModal('displayName')
+            }
         },
         {
             title:'Cambiar Email',
@@ -26,7 +39,9 @@ export const AccountOptions = () => {
             iconColorLeft:'#ccc',
             iconNameRight:'chevron-right',
             iconColorRight:'#ccc',
-            onPress : () => { console.log('email') }
+            onPress : () => { 
+                 showModal('email') 
+            }
         },
         {
             title:'Cambiar Password',
@@ -35,10 +50,51 @@ export const AccountOptions = () => {
             iconColorLeft:'#ccc',
             iconNameRight:'chevron-right',
             iconColorRight:'#ccc',
-            onPress : () => { console.log('password') }
+            onPress : () => { 
+                 showModal('password')
+            }
         }
     ];
-  
+
+    const showModal = key => {
+        // Switch para ver que compoenente se va a renderizar
+        switch (key) {
+            case 'displayName':
+                setIsRenderComponent(
+                    <FormDisplayName 
+                        displayName={userInfo.displayName} 
+                        setIsVisibleModal={setIsVisibleModal}
+                        setReloadData={setReloadData}
+                        toastRef={toastRef}
+                    />
+                );
+                setIsVisibleModal(true);
+                break;
+            case 'email':
+                setIsRenderComponent(
+                    <FormEmail 
+                        email={userInfo.email}
+                        setIsVisibleModal={setIsVisibleModal}
+                        setReloadData={setReloadData}
+                        toastRef={toastRef}
+                    />
+                );
+                setIsVisibleModal(true);
+                break;
+            case 'password':
+                setIsRenderComponent(
+                    <FormPassword 
+                        setIsVisibleModal={setIsVisibleModal}
+                        toastRef={toastRef}
+                    />
+                );
+                setIsVisibleModal(true);
+                break;
+            default:
+                break;
+        }
+    }
+
     return(
       <View>
         {
@@ -62,6 +118,14 @@ export const AccountOptions = () => {
             />
           ))
         }
+        {isRenderComponent && (
+            <ModalOptions  
+                isVisibleModal={isVisibleModal} 
+                setIsVisibleModal={setIsVisibleModal}
+            >
+                {isRenderComponent}
+            </ModalOptions>
+        )}
       </View>
       );
 }
