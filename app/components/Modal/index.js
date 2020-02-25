@@ -3,7 +3,7 @@
 */
 
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
 export const ModalOptions = (props) => {
