@@ -23,9 +23,7 @@ const db = firebase.firestore(firebaConfigApp); // configuracion de firestore db
 
 //Componente AddRestautanForm
 export const AddRestaurantForm = (props) => {
-
-    const { toastRef, setIsLoading, navigation } = props;
-
+    const { toastRef, setIsLoading, navigation, setIsReloadRestaurants } = props; 
     const [ selectImage, setSelectImage ] = useState([]);
     const [ restaurantName, setRestaurantName ] = useState('');
     const [ resutaurantUbication, setRestaurantUbication ]  = useState('');
@@ -46,13 +44,12 @@ export const AddRestaurantForm = (props) => {
             
             //Llamando a la funcion para subir fotos
             uploadImagenStorage(selectImage).then( arrayImages => {
-
                 //Subiendo informacion a Firebase
                 db.collection("Restaurants").add({
                     name: restaurantName,
-                    address: locationRestaurant,
+                    address: resutaurantUbication,
                     description: restaurantDescription,
-                    location: resutaurantUbication,
+                    location: locationRestaurant,
                     images: arrayImages,
                     rating : 0,
                     ratingTotal: 0,
@@ -61,8 +58,13 @@ export const AddRestaurantForm = (props) => {
                     createByUser: firebase.auth().currentUser.uid
                 }).then(() => {
                     setIsLoading(false);
+
+                    // cambiamos a true para hacer el recargado de nuevos resutarantes
+                    setIsReloadRestaurants(true);
+                    console.log('creamos');
                     navigation.navigate("Restaurants");
-                }).catch(() => {
+                }).catch((err) => {
+                    console.log(err);
                     setIsLoading(false);
                     toastRef.current.show("No se agrego el Restaurant, intente mas tarde.", 3000);
                 });

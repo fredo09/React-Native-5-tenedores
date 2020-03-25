@@ -3,15 +3,14 @@
  */
 
 import React, { useState,useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Loading } from './../../components/Loading';
 import { AddRestaurantForm } from './../../components/Restaurants/AddRestaurantForm';
 import Toast from 'react-native-easy-toast';
 
 export const AddRestaurant = (props) => {
-    
     const { navigation } = props;
-    
+    const { setIsReloadRestaurants } = navigation.state.params;
     const toastRef = useRef();
     const [ isLoading, setIsLoading ] = useState(false);
 
@@ -21,6 +20,7 @@ export const AddRestaurant = (props) => {
                 navigation={navigation}
                 setIsLoading={setIsLoading}
                 toastRef={toastRef}
+                setIsReloadRestaurants={setIsReloadRestaurants}
             />
             <Toast 
                 position="center"
@@ -28,7 +28,7 @@ export const AddRestaurant = (props) => {
                 ref={toastRef}
             />
             <Loading 
-                text="Agregando Restaurante" 
+                text="Creando Restaurante" 
                 isVisible={isLoading}
             />
         </View>
