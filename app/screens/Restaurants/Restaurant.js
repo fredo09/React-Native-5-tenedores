@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { CarruselItem } from './../../components/CarruselRestaurant';
 import { Rating, Icon, ListItem } from 'react-native-elements';
 import { MapRestaurant } from './../../components/Map';
+import { ListReviewRestaurant } from './../../components/ListReview';
 import * as Firebase from 'firebase';
 
 const screenwidth = Dimensions.get('window').width;
@@ -18,6 +19,8 @@ export const DetailRestaurant = (props) => {
 
     // URL para las Imagenes
     const [imagesRestaurante , setImagesRestaurante] = useState([]);
+    const [ rating, setRating ] = useState(restaurant.rating);
+
 
     //Obtenindo url de las imagenes del restaurante.
     useEffect(() => {
@@ -41,6 +44,9 @@ export const DetailRestaurant = (props) => {
     
     return(    
         <ScrollView style={styles.viewContainer}>
+            <View style={styles.viewFavorite}>
+
+            </View>
             <CarruselItem 
                 arrayImages={imagesRestaurante}
                 width={screenwidth}
@@ -50,12 +56,17 @@ export const DetailRestaurant = (props) => {
             <TitleRestaurant 
                 name={restaurant.name}
                 description={restaurant.description}
-                rating={restaurant.rating}
+                rating={rating}
             />
            <RestaurantInfo 
                 location={restaurant.location}
                 name={restaurant.name}
                 addres={restaurant.address}
+           />
+           <ListReviewRestaurant 
+                navigation={navigation}
+                idRestaurant={restaurant.id}
+                setRating={setRating}
            />
         </ScrollView>
     );
@@ -91,6 +102,7 @@ const TitleRestaurant = (props) => {
 // Informacion del Restaurante
 const RestaurantInfo = (props) =>{
     const { location, name, addres } = props;
+
 
     const infoRestaurante = [
         {
@@ -135,7 +147,8 @@ const styles = StyleSheet.create({
         flex: 1
     },
     viewResturantTitle:{
-        margin: 15
+        margin: 15,
+
     },
     nameRestaurant:{
         fontSize: 20,
@@ -156,5 +169,17 @@ const styles = StyleSheet.create({
     viewContainerListItem:{
         borderBottomColor: "#d8d8d8",
         borderBottomWidth: 1
+    },
+    viewFavorite:{
+        position: "absolute",
+        right: 0,
+        top: 0,
+        zIndex: 2,
+        backgroundColor: "#fff",
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 15,
+        paddingRight: 5,
+        borderBottomLeftRadius: 100
     }
 });
